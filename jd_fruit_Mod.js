@@ -39,13 +39,13 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 let NowHour = new Date().getHours();
 let llhelp=true;
-if ($.isNode() && process.env.CC_NOHELPAFTER8) {	
-	if (process.env.CC_NOHELPAFTER8=="true"){
-		if (NowHour>8){
-			llhelp=false;
-			console.log(`现在是9点后时段，不启用互助....`);
-		}			
-	}	
+if ($.isNode() && process.env.CC_NOHELPAFTER8) {  
+  if (process.env.CC_NOHELPAFTER8=="true"){
+    if (NowHour>8){
+      llhelp=false;
+      console.log(`现在是9点后时段，不启用互助....`);
+    }     
+  } 
 }
 const fs = require('fs');
 let boolneedUpdate=false;
@@ -63,9 +63,9 @@ if (Fileexists) {
 
 let WP_APP_TOKEN_ONE = "";
 /* if ($.isNode()) {
-	if (process.env.WP_APP_TOKEN_ONE) {		
-		WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
-	}
+  if (process.env.WP_APP_TOKEN_ONE) {   
+    WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
+  }
 }
 
 if (WP_APP_TOKEN_ONE) {
@@ -110,17 +110,17 @@ let NoNeedCodes = [];
               subTitle = '';
               option = {};
               $.retry = 0;
-			  llgetshare=false;
+        llgetshare=false;
               await GetCollect();
-			  if(llgetshare){
-				  await $.wait(5000);
-				  lnrun++;				  
-			  }
-			  if(lnrun==10){
-				  console.log(`访问接口次数达到10次，休息一分钟.....`);
-				  await $.wait(60*1000);
-				  lnrun=0;
-			  }
+        if(llgetshare){
+          await $.wait(5000);
+          lnrun++;          
+        }
+        if(lnrun==10){
+          console.log(`访问接口次数达到10次，休息一分钟.....`);
+          await $.wait(60*1000);
+          lnrun=0;
+        }
           }
       }
       if (boolneedUpdate) {
@@ -193,9 +193,9 @@ async function jdFruit() {
         if ($.isNode()) {
           await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看`);
         }
-		if ($.isNode() && WP_APP_TOKEN_ONE) {
-			await notify.sendNotifybyWxPucher($.name, `【京东账号】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n【领取步骤】京东->我的->东东农场兑换京东红包,可以用于京东app的任意商品.`, `${$.UserName}`);
-		}
+    if ($.isNode() && WP_APP_TOKEN_ONE) {
+      await notify.sendNotifybyWxPucher($.name, `【京东账号】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n【领取步骤】京东->我的->东东农场兑换京东红包,可以用于京东app的任意商品.`, `${$.UserName}`);
+    }
         return
       } else if ($.farmInfo.treeState === 1) {
         console.log(`\n${$.farmInfo.farmUserPro.name}种植中...\n`)
@@ -218,12 +218,12 @@ async function jdFruit() {
       await predictionFruit();//预测水果成熟时间
     } else {
       console.log(`初始化农场数据异常, 请登录京东 app查看农场功能是否正常`); 
-	  message+=`初始化农场数据异常, 请登录京东 app查看农场功能是否正常`;
+    message+=`初始化农场数据异常, 请登录京东 app查看农场功能是否正常`;
     }
   } catch (e) {
     console.log(`任务执行异常，请检查执行日志 ‼️‼️`);
     $.logErr(e);
-	const errMsg = `京东账号${$.index} ${$.nickName || $.UserName}\n任务执行异常，请检查执行日志 ‼️‼️`;
+  const errMsg = `京东账号${$.index} ${$.nickName || $.UserName}\n任务执行异常，请检查执行日志 ‼️‼️`;
     if ($.isNode()) await notify.sendNotify(`${$.name}`, errMsg);
     $.msg($.name, '', `${errMsg}`)
   }
@@ -474,23 +474,23 @@ async function doTenWaterAgain() {
   }
   if (`${jdFruitBeanCard}` === 'true' && JSON.stringify($.myCardInfoRes).match('限时翻倍')) {
     console.log(`\n您设置的是水滴换豆功能,现在为您换豆`);
-	
-	for (let lncount = 0; lncount < $.myCardInfoRes.beanCard; lncount++) {
-	    if (totalEnergy >= 150 && $.myCardInfoRes.beanCard > 0) {
-	        //使用水滴换豆卡
-	        await userMyCardForFarm('beanCard');
-	        console.log(`使用水滴换豆卡结果:${JSON.stringify($.userMyCardRes)}`);
-	        if ($.userMyCardRes.code === '0') {
-				totalEnergy=totalEnergy-100;
-	            message += `【水滴换豆卡】获得${$.userMyCardRes.beanCount}个京豆\n`;	            
-	        }
-	    } else {
-	        console.log(`您目前水滴:${totalEnergy}g,水滴换豆卡${$.myCardInfoRes.beanCard}张,暂不满足水滴换豆的条件,为您继续浇水`)
-			break;
-	    }
-	}
-	if ($.myCardInfoRes.beanCard>0)
-		return;   
+  
+  for (let lncount = 0; lncount < $.myCardInfoRes.beanCard; lncount++) {
+      if (totalEnergy >= 150 && $.myCardInfoRes.beanCard > 0) {
+          //使用水滴换豆卡
+          await userMyCardForFarm('beanCard');
+          console.log(`使用水滴换豆卡结果:${JSON.stringify($.userMyCardRes)}`);
+          if ($.userMyCardRes.code === '0') {
+        totalEnergy=totalEnergy-100;
+              message += `【水滴换豆卡】获得${$.userMyCardRes.beanCount}个京豆\n`;              
+          }
+      } else {
+          console.log(`您目前水滴:${totalEnergy}g,水滴换豆卡${$.myCardInfoRes.beanCard}张,暂不满足水滴换豆的条件,为您继续浇水`)
+      break;
+      }
+  }
+  if ($.myCardInfoRes.beanCard>0)
+    return;   
   }
   // if (totalEnergy > 100 && $.myCardInfoRes.fastCard > 0) {
   //   //使用快速浇水卡
@@ -531,9 +531,9 @@ async function doTenWaterAgain() {
       if ($.isNode()) {
         await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName || $.UserName}\n${$.farmInfo.farmUserPro.name}已可领取`);
       }
-	  if ($.isNode() && WP_APP_TOKEN_ONE) {
-			await notify.sendNotifybyWxPucher($.name, `【京东账号】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n【领取步骤】京东->我的->东东农场兑换京东红包,可以用于京东app的任意商品.`, `${$.UserName}`);
-		}
+    if ($.isNode() && WP_APP_TOKEN_ONE) {
+      await notify.sendNotifybyWxPucher($.name, `【京东账号】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n【领取步骤】京东->我的->东东农场兑换京东红包,可以用于京东app的任意商品.`, `${$.UserName}`);
+    }
     }
   } else if (overageEnergy >= 10) {
     console.log("目前剩余水滴：【" + totalEnergy + "】g，可继续浇水");
@@ -562,9 +562,9 @@ async function doTenWaterAgain() {
       if ($.isNode()) {
         await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName || $.UserName}\n${$.farmInfo.farmUserPro.name}已可领取`);
       }
-	  if ($.isNode() && WP_APP_TOKEN_ONE) {
-			await notify.sendNotifybyWxPucher($.name, `【京东账号】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n【领取步骤】京东->我的->东东农场兑换京东红包,可以用于京东app的任意商品.`, `${$.UserName}`);
-		}
+    if ($.isNode() && WP_APP_TOKEN_ONE) {
+      await notify.sendNotifybyWxPucher($.name, `【京东账号】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n【领取步骤】京东->我的->东东农场兑换京东红包,可以用于京东app的任意商品.`, `${$.UserName}`);
+    }
     }
   } else {
     console.log("目前剩余水滴：【" + totalEnergy + "】g,不再继续浇水,保留部分水滴用于完成第二天【十次浇水得水滴】任务")
@@ -782,60 +782,60 @@ async function masterHelpShare() {
   let remainTimes = 3;//今日剩余助力次数,默认3次（京东农场每人每天3次助力机会）。
   let helpSuccessPeoples = '';//成功助力好友
   if(llhelp){
-	  console.log('开始助力好友')
-	  for (let code of newShareCodes) {
-		if(NoNeedCodes){
-			var llnoneed=false;
-			for (let NoNeedCode of NoNeedCodes) {
-				if (code==NoNeedCode){
-					llnoneed=true;
-					break;
-				}
-			}
-			if(llnoneed){
-				console.log(`${code}助力已满，跳过...`);
-				continue;
-			}
-		}        
-		console.log(`${$.UserName}开始助力: ${code}`);
-		if (!code) continue;
-		if (!$.farmInfo.farmUserPro) {
-		  console.log('未种植,跳过助力\n')
-		  continue
-		}
-		if (code === $.farmInfo.farmUserPro.shareCode) {
-		  console.log('不能为自己助力哦，跳过自己的shareCode\n')
-		  continue
-		}
-		await masterHelp(code);
-		if ($.helpResult.code === '0') {
-		  if ($.helpResult.helpResult.code === '0') {
-			//助力成功
-			salveHelpAddWater += $.helpResult.helpResult.salveHelpAddWater;
-			console.log(`【助力好友结果】: 已成功给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力`);
-			console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
-			helpSuccessPeoples += ($.helpResult.helpResult.masterUserInfo.nickName || '匿名用户') + ',';
-		  } else if ($.helpResult.helpResult.code === '8') {
-			console.log(`【助力好友结果】: 助力【${$.helpResult.helpResult.masterUserInfo.nickName}】失败，您今天助力次数已耗尽`);
-		  } else if ($.helpResult.helpResult.code === '9') {
-			console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
-		  } else if ($.helpResult.helpResult.code === '10') {
-			NoNeedCodes.push(code);
-			console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
-		  } else {
-			console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
-		  }
-		  console.log(`【今日助力次数还剩】${$.helpResult.helpResult.remainTimes}次\n`);
-		  remainTimes = $.helpResult.helpResult.remainTimes;
-		  if ($.helpResult.helpResult.remainTimes === 0) {
-			console.log(`您当前助力次数已耗尽，跳出助力`);
-			break
-		  }
-		} else {
-		  console.log(`助力失败::${JSON.stringify($.helpResult)}`);
-		}
-	  }
-	}
+    console.log('开始助力好友')
+    for (let code of newShareCodes) {
+    if(NoNeedCodes){
+      var llnoneed=false;
+      for (let NoNeedCode of NoNeedCodes) {
+        if (code==NoNeedCode){
+          llnoneed=true;
+          break;
+        }
+      }
+      if(llnoneed){
+        console.log(`${code}助力已满，跳过...`);
+        continue;
+      }
+    }        
+    console.log(`${$.UserName}开始助力: ${code}`);
+    if (!code) continue;
+    if (!$.farmInfo.farmUserPro) {
+      console.log('未种植,跳过助力\n')
+      continue
+    }
+    if (code === $.farmInfo.farmUserPro.shareCode) {
+      console.log('不能为自己助力哦，跳过自己的shareCode\n')
+      continue
+    }
+    await masterHelp(code);
+    if ($.helpResult.code === '0') {
+      if ($.helpResult.helpResult.code === '0') {
+      //助力成功
+      salveHelpAddWater += $.helpResult.helpResult.salveHelpAddWater;
+      console.log(`【助力好友结果】: 已成功给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力`);
+      console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
+      helpSuccessPeoples += ($.helpResult.helpResult.masterUserInfo.nickName || '匿名用户') + ',';
+      } else if ($.helpResult.helpResult.code === '8') {
+      console.log(`【助力好友结果】: 助力【${$.helpResult.helpResult.masterUserInfo.nickName}】失败，您今天助力次数已耗尽`);
+      } else if ($.helpResult.helpResult.code === '9') {
+      console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
+      } else if ($.helpResult.helpResult.code === '10') {
+      NoNeedCodes.push(code);
+      console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
+      } else {
+      console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
+      }
+      console.log(`【今日助力次数还剩】${$.helpResult.helpResult.remainTimes}次\n`);
+      remainTimes = $.helpResult.helpResult.remainTimes;
+      if ($.helpResult.helpResult.remainTimes === 0) {
+      console.log(`您当前助力次数已耗尽，跳出助力`);
+      break
+      }
+    } else {
+      console.log(`助力失败::${JSON.stringify($.helpResult)}`);
+    }
+    }
+  }
   if ($.isLoon() || $.isQuanX() || $.isSurge()) {
     let helpSuccessPeoplesKey = timeFormat() + $.farmInfo.farmUserPro.shareCode;
     if (!$.getdata(helpSuccessPeoplesKey)) {
@@ -1115,7 +1115,7 @@ async function duck() {
 }
 async function GetCollect() {
     try {
-		console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】`);
+    console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】`);
         var llfound = false;
         var strShareCode = "";
         if (TempShareCache) {
@@ -1128,11 +1128,11 @@ async function GetCollect() {
         }
         if (!llfound) {
             console.log($.UserName + "该账号无缓存，尝试联网获取互助码.....");
-			llgetshare=true;
-            await initForFarm();			
+      llgetshare=true;
+            await initForFarm();      
             if ($.farmInfo.farmUserPro) {
                 var tempAddCK = {};
-				strShareCode=$.farmInfo.farmUserPro.shareCode;
+        strShareCode=$.farmInfo.farmUserPro.shareCode;
                 tempAddCK = {
                     "pt_pin": $.UserName,
                     "ShareCode": strShareCode
@@ -1410,13 +1410,13 @@ async function initForFarm() {
     };
     $.post(option, (err, resp, data) => {
       try {
-        if (err) {		  
+        if (err) {      
           console.log('\ninitForFarm: API查询请求失败 ‼️‼️');
           console.log(JSON.stringify(err));
           $.logErr(err);
         } else {
           if (safeGet(data)) {
-            $.farmInfo = JSON.parse(data)			
+            $.farmInfo = JSON.parse(data)     
           }
         }
       } catch (e) {
